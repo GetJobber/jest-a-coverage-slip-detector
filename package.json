@@ -1,0 +1,44 @@
+{
+  "name": "@jobber/jest-a-coverage-slip-detector",
+  "version": "1.0.0",
+  "description": "Ensures that new files have jest coverage and that legacy files only increase",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.js' --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GetJobber/jest-a-coverage-slip-detector.git"
+  },
+  "keywords": [
+    "jest",
+    "ratchet"
+  ],
+  "bin": "./bin/jest-a-coverage-slip-detector",
+  "files": [
+    "bin/*",
+    "src/*.js",
+    "LICENSE"
+  ],
+  "author": "Jobber",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GetJobber/jest-a-coverage-slip-detector/issues"
+  },
+  "homepage": "https://github.com/GetJobber/jest-a-coverage-slip-detector#readme",
+  "engines": {
+    "node": ">=12"
+  },
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "minimatch": "^5.1.0",
+    "table": "^6.8.0"
+  }
+}

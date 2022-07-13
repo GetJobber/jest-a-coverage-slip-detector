@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const {
+  updatePerFileCoverageExceptions,
+  runPerFileCoverageTest,
+} = require("../src");
+
+switch (process.argv[2]) {
+  case "--force":
+  case "--force-update":
+    updatePerFileCoverageExceptions(true);
+    break;
+  case "--update":
+    updatePerFileCoverageExceptions(false);
+    break;
+  default:
+    runPerFileCoverageTest();
+    break;
+}
