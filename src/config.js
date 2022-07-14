@@ -33,7 +33,7 @@ const defaultConfig = {
     aboveThreshold:
       "The following files are above their inherited test coverage threshold. These exceptions should be updated to meet their new level.",
     regeneratePrompt: `After a complete and passing ${chalk.yellow(
-      "`npm run test`",
+      "`npm test`",
     )} use ${chalk.yellow(
       "`jest-a-coverage-slip-detector --update`",
     )} to regenerate the required test threshold for these files.`,
