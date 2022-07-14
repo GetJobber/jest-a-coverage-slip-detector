@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Ensures that new files have jest coverage and that legacy files only increase",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint .",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.js' --write"
