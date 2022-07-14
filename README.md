@@ -20,8 +20,7 @@ Additionally, this library can be added to an existing project such that legacy 
 Within `jest.config.js`:
 1. Ensure Jest is configured to include `json-summary` in `coverageReporters`.
 2. Ensure that coverage collection is enabled, either with the `--coverage` parameter, or by configuring `collectCoverage` to `true`.
-3. Set coverage to collect from all relevant files. Likely something like: `collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}']`
-4. Either remove the `coverageThreshold` configuration from Jest, or set it to: `coverageThreshold: { global: {} }`
+3. Either remove the `coverageThreshold` configuration from Jest, or set it to: `coverageThreshold: { global: {} }`
 
 Example:
 ```js
@@ -31,7 +30,6 @@ module.exports = {
   ],
   collectCoverage: true,
   coverageThreshold: { global: {} },
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
 }
 ```
 
