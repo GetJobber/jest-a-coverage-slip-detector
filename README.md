@@ -89,8 +89,13 @@ Example:
 Usage: jest-a-coverage-slip-detector [options]
 
 Options:
+  --help, -h             Show this help
+
   --update               Update exceptions with improved coverage levels.
                          Used to 'ratchet' up coverage after improving it.
+
   --force-update         Record current coverage errors as exceptions.
-                         Used to set the initial per file snapshot or to force accept a future reduction in coverage.
+                         Used to:
+                           - Snapshot current coverage errors as legacy exceptions.
+                           - Force accept a future reduction in coverage.
 ```
