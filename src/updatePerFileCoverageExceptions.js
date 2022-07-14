@@ -52,7 +52,7 @@ exports.updatePerFileCoverageExceptions =
         if (coverageIgnore.some(ignoreGlob => minimatch(file, ignoreGlob))) {
           // Skip ignored file.
         } else if (coverageLessThan(coverage, config.coverageGoal)) {
-          exceptions[file] = coverageException(coverage);
+          exceptions[file] = coverageException(coverage, config.coverageGoal);
         }
 
         return exceptions;
@@ -70,10 +70,10 @@ exports.updatePerFileCoverageExceptions =
       JSON.stringify(allExceptions, undefined, 2),
     );
 
-    function coverageException(current) {
+    function coverageException(current, goal) {
       return Object.entries(current).reduce(
         (accumulator, [key, { pct: percent }]) => {
-          accumulator[key] = percent;
+          accumulator[key] = Math.min(percent, goal[key]);
           return accumulator;
         },
         {},
