@@ -19,8 +19,8 @@ Additionally, this library can be added to an existing project such that legacy 
 
 Within `jest.config.js`:
 1. Ensure Jest is configured to include `json-summary` in `coverageReporters`.
-1. Ensure that coverage collection is enabled, either with the `--coverage` parameter, or by configuring `collectCoverage` to `true`.
-1. Either remove the `coverageThreshold` configuration from Jest, or set it to: `coverageThreshold: { global: {} }`
+2. Ensure that coverage collection is enabled, either with the `--coverage` parameter, or by configuring `collectCoverage` to `true`.
+3. Either remove the `coverageThreshold` configuration from Jest, or set it to: `coverageThreshold: { global: {} }`
 
 Example:
 ```js
@@ -29,7 +29,7 @@ module.exports = {
     'json-summary' // plus any other reporters, e.g. "lcov", "text", "text-summary"
   ],
   collectCoverage: true,
-  coverageThreshold: { global: {} }
+  coverageThreshold: { global: {} },
 }
 ```
 
@@ -41,8 +41,8 @@ Within `package.json`:
   "scripts": {
     "test": "jest --coverage", // or set `collectCoverage` to `true` in Jest config
     "posttest": "jest-a-coverage-slip-detector",
-    "jest:updateCoverageExceptions": "jest-a-coverage-slip-detector --update",
-    "jest:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update"
+    "jest:updateCoverageExceptions": "jest-a-coverage-slip-detector --update", // Used to 'ratchet' up coverage after improving it.
+    "jest:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update" // Used to set the initial per file snapshot or to force accept a future reduction in coverage.
   }
 }
 ```
@@ -50,6 +50,7 @@ Within `package.json`:
 ## Configure Coverage Goals
 
 If you're happy with the defaults below, nothing further is needed:
+
 ```js
 {
   "coverageGoal": { "lines": 80, "functions": 80, "statements": 80, "branches": 80 }
@@ -71,13 +72,13 @@ Example:
 
 ### First Run
 
-1. Generate and view coverage errors: `npm run test`
-1. Record current coverage errors as legacy exceptions: `npm run jest:updateCoverageExceptionsForce`
+1. Generate and view coverage errors: `npm test`
+1. Snapshot current coverage errors as legacy exceptions: `npm run jest:updateCoverageExceptionsForce`
 1. Commit the generated exception listing (`generatedCoverageExceptions.json` by default) to source control
 
 ### Going Forward
 
-- Run `npm run test` as normal (locally or in CI), any slips in test coverage will fail out the command. Note that this will happen for either legacy files not meeting their recorded targets, or in new files not meeting the configured goals.
+- Run `npm test` as normal (locally or in CI), any slips in test coverage will fail out the command. Note that this will happen for either legacy files not meeting their recorded targets, or in new files not meeting the configured goals.
 - As improvements to test coverage are made to legacy files, run `npm run jest:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
 
 
@@ -86,6 +87,13 @@ Example:
 Usage: jest-a-coverage-slip-detector [options]
 
 Options:
-  --update               update exceptions with improved coverage levels
-  --force-update         record current coverage errors as exceptions
+  --help, -h             Show this help
+
+  --update               Update exceptions with improved coverage levels.
+                         Used to 'ratchet' up coverage after improving it.
+
+  --force-update         Record current coverage errors as exceptions.
+                         Used to:
+                           - Snapshot current coverage errors as legacy exceptions.
+                           - Force accept a future reduction in coverage.
 ```
