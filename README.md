@@ -152,6 +152,6 @@ Options:
 
 - This library dynamically leverages `collectCoverageFrom` in order to capture snapshots on files even if they are completely untested. This means that as you incrementally add test coverage, instead of a failure, you'll be greeted with a message celebrating the improved coverage and recommending that you update snapshots to bump up the threshold for that file.
 
-*What exactly the purpose of `withJestSlipDetection`?`
+*What exactly is the purpose of `withJestSlipDetection`?*
 
-- In order to properly ensure coverage reporting at a per file level we need to collect coverage from every file. If you run jest against a single file then the calculated coverage for other files will report incorrectly even if they do have tests that just weren't executed by this focused run. To guard against this `withJestSlipDetection` will intelligently set Jest's internal `collectCoverageFrom`.
+- In order to properly ensure coverage reporting at a per file level we need to collect coverage from every file. If you run Jest against a single file then the calculated coverage for other files will report incorrectly even if they do have tests that just weren't executed by this focused run. To guard against this `withJestSlipDetection` will intelligently set Jest's internal `collectCoverageFrom`.
