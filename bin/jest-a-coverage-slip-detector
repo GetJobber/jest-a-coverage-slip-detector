@@ -8,6 +8,7 @@ const {
 switch (process.argv[2]) {
   case "--help":
   case "-h":
+    // eslint-disable-next-line no-console
     console.log(`
 Usage: jest-a-coverage-slip-detector [options]
 
@@ -31,6 +32,8 @@ Options:
     updatePerFileCoverageExceptions(false);
     break;
   default:
-    runPerFileCoverageTest();
+    if (runPerFileCoverageTest()) {
+      process.exit(1);
+    }
     break;
 }
