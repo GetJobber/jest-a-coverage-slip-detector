@@ -35,7 +35,7 @@ const defaultConfig = {
     regeneratePrompt: `After a complete and passing ${chalk.yellow(
       "`npm test`",
     )} use ${chalk.yellow(
-      "`jest-a-coverage-slip-detector --update`",
+      "`npm run jest:updateCoverageExceptions`",
     )} to regenerate the required test threshold for these files.`,
   },
 };
