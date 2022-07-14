@@ -3,4 +3,5 @@ module.exports = {
     .runPerFileCoverageTest,
   updatePerFileCoverageExceptions: require("./updatePerFileCoverageExceptions")
     .updatePerFileCoverageExceptions,
+  withJestSlipDetection: require("./config").withJestSlipDetection,
 };

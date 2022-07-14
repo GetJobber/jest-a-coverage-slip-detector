@@ -13,6 +13,11 @@ exports.configDir = configDir;
 
 const defaultConfig = {
   coverageGoal: { lines: 80, functions: 80, statements: 80, branches: 80 },
+  coverageGlob: [
+    "**/*.{ts,tsx,js,jsx}",
+    "!**/node_modules/**",
+    "!**/vendor/**",
+  ],
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
@@ -35,11 +40,76 @@ const defaultConfig = {
   },
 };
 
-exports.loadConfig = function loadConfig() {
+function loadConfig() {
   const configPath = path.resolve(configDir, CONFIG_FILE);
   if (!fs.existsSync(configPath)) {
     return defaultConfig;
   }
 
   return { ...defaultConfig, ...require(configPath) };
+}
+exports.loadConfig = loadConfig;
+
+exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
+  const cliArgumentPrefix = "-";
+  const config = loadConfig();
+
+  // collect coverage from everywhere if we don't have a testPathPattern
+  const args = process.argv.slice(2);
+  const hasTestPathPattern = args.some(
+    arg => !arg.startsWith(cliArgumentPrefix),
+  );
+  if (
+    !hasTestPathPattern &&
+    !jestConfig.collectCoverageFrom &&
+    config.coverageGlob
+  ) {
+    jestConfig.collectCoverageFrom = [].concat(config.coverageGlob);
+  }
+
+  validateJestConfig(jestConfig, args);
+
+  return jestConfig;
 };
+
+function validateJestConfig(jestConfig, args) {
+  const warnings = [];
+
+  if (!jestConfig.collectCoverage && !args.some(arg => arg === "--coverage")) {
+    warnings.push(
+      "Ensure `collectCoverage` is enabled in the Jest configuration or the `--coverage` argument is used.",
+    );
+  }
+
+  if (
+    !jestConfig.coverageReporters ||
+    !jestConfig.coverageReporters.some(reporter => reporter === "json-summary")
+  ) {
+    warnings.push(
+      "Ensure `json-summary` is added into `coverageReporters` in the Jest configuration.",
+    );
+  }
+
+  const threshold = jestConfig.coverageThreshold;
+  if (
+    threshold &&
+    (Object.keys(threshold).length > 1 ||
+      !threshold.global ||
+      Object.keys(threshold.global).length > 0)
+  ) {
+    warnings.push(
+      "Either remove `coverageThreshold` in the Jest configuration, or set it to: `coverageThreshold: { global: {} }`",
+    );
+  }
+
+  if (warnings.length > 0) {
+    printWarnings(warnings);
+  }
+}
+
+function printWarnings(warnings) {
+  const attention = chalk.yellow("⚠️  WARNING ⚠️\n");
+
+  // eslint-disable-next-line no-console
+  console.warn(`${attention}${warnings.join("\n")}\n`);
+}
