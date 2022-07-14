@@ -71,7 +71,7 @@ Within `package.json`:
     "test": "jest --coverage", // or set `collectCoverage` to `true` in Jest config
     "posttest": "jest-a-coverage-slip-detector",
     "jest:updateCoverageExceptions": "jest-a-coverage-slip-detector --update", // Used to 'ratchet' up coverage after improving it.
-    "jest:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update" // Used to set the initial per file snapshot or to force accept a future reduction in coverage.
+    "jest:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update" // Used to set the initial per file snapshot or to force accept a reduction in coverage.
   }
 }
 ```
@@ -131,7 +131,7 @@ Options:
   --force-update         Record current coverage errors as exceptions.
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
-                           - Force accept a future reduction in coverage.
+                           - Force accept a reduction in coverage.
 ```
 
 ## FAQ

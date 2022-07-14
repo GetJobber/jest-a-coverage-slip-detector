@@ -20,7 +20,7 @@ Options:
   --force-update         Record current coverage errors as exceptions.
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
-                           - Force accept a future reduction in coverage.
+                           - Force accept a reduction in coverage.
     `);
     break;
   case "--force":
