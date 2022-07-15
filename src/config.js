@@ -59,8 +59,10 @@ exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
   const hasTestPathPattern = args.some(
     arg => !arg.startsWith(cliArgumentPrefix),
   );
+  const isCI = args.some(arg => arg == "--ci");
+  const useCollectCoverageFrom = !hasTestPathPattern || isCI;
   if (
-    !hasTestPathPattern &&
+    useCollectCoverageFrom &&
     !jestConfig.collectCoverageFrom &&
     config.coverageGlob
   ) {
