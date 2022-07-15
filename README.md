@@ -1,7 +1,7 @@
 # `@jobber/jest-a-coverage-slip-detector`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![npm version](https://badge.fury.io/js/%40shopify%2Fjest-a-coverage-slip-detector.svg)](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector)
+[![npm version](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector.svg)](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector)
 
 This library ensures that new files have [Jest](https://jestjs.io/) coverage meeting the configured goals.
 
@@ -52,11 +52,11 @@ import { withJestSlipDetection } from "@jobber/jest-a-coverage-slip-detector";
 const config: Config.InitialOptions = {
   coverageReporters: [
     "json-summary" // plus any other reporters, e.g. "lcov", "text", "text-summary"
-  ]
+  ],
   collectCoverage: true,
   transform: {
     "^.+\\.ts?$": "ts-jest",
-  },
+  }
 };
 
 export default withJestSlipDetection(config);
