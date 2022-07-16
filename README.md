@@ -114,6 +114,7 @@ Example:
 ### Going Forward
 
 - Run `npm test` as normal (locally or in CI), any slips in test coverage will fail out the command. Note that this will happen for either legacy files not meeting their recorded targets, or in new files not meeting the configured goals.
+- If you want to soft-launch the tooling, use the `--report-only` option in the initial rollout, and remove the option once you're ready to require coverage errors to be addressed.
 - As improvements to test coverage are made to legacy files, run `npm run jest:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
 
 
@@ -132,6 +133,8 @@ Options:
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
                            - Force accept a reduction in coverage.
+
+  --report-only          Exit successfully even if coverage errors are detected.
 ```
 
 ## FAQ

@@ -5,7 +5,8 @@ const {
   runPerFileCoverageTest,
 } = require("../src");
 
-switch (process.argv[2]) {
+const option = process.argv[2];
+switch (option) {
   case "--help":
   case "-h":
     // eslint-disable-next-line no-console
@@ -22,6 +23,8 @@ Options:
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
                            - Force accept a reduction in coverage.
+
+  --report-only          Exit successfully even if coverage errors are detected.
     `);
     break;
   case "--force":
@@ -32,7 +35,7 @@ Options:
     updatePerFileCoverageExceptions(false);
     break;
   default:
-    if (runPerFileCoverageTest()) {
+    if (runPerFileCoverageTest() && option != "--report-only") {
       process.exit(1);
     }
     break;
