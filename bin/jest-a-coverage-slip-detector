@@ -4,7 +4,9 @@ const {
   updatePerFileCoverageExceptions,
   runPerFileCoverageTest,
 } = require("../src");
+const { mergeCoverageAndGenerateSummaryReport } = require("./mergeCoverage");
 
+let validateCoverage = false;
 switch (process.argv[2]) {
   case "--help":
   case "-h":
@@ -22,6 +24,8 @@ Options:
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
                            - Force accept a reduction in coverage.
+
+  --merge                Merges together concurrently collected coverage
     `);
     break;
   case "--force":
@@ -31,9 +35,17 @@ Options:
   case "--update":
     updatePerFileCoverageExceptions(false);
     break;
-  default:
-    if (runPerFileCoverageTest()) {
-      process.exit(1);
-    }
+  case "--merge":
+    mergeCoverageAndGenerateSummaryReport();
+    validateCoverage = true;
     break;
+  default:
+    validateCoverage = true;
+    break;
+}
+
+if (validateCoverage) {
+  if (runPerFileCoverageTest()) {
+    process.exit(1);
+  }
 }

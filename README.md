@@ -116,6 +116,38 @@ Example:
 - Run `npm test` as normal (locally or in CI), any slips in test coverage will fail out the command. Note that this will happen for either legacy files not meeting their recorded targets, or in new files not meeting the configured goals.
 - As improvements to test coverage are made to legacy files, run `npm run jest:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
 
+## Concurrency and Parallelism
+
+If you're leveraging parallelism to do test splitting and running your tests concurrently on CI (e.g. fan-out/fan-in), a few adjustments to the pattern are needed. Collecting coverage while testing and reporting using `postpost` will result in reporting happening multiple times on each concurrent test run, potentially against incomplete coverage numbers.
+
+If parallelism is being used:
+1. Collect full `json` coverage reports - this will happen automatically if you configure a `mergeCoveragePath` and use `--ci` in your CI's test command.
+    - You will need to configure your CI to collect these in such a way that they can be located later using the path configured in `mergeCoveragePath`. For CircleCI, this means adding them to a workspace folder with unique names.
+1. Ensure you aren't triggering `posttest` in your CI - this means using jest directly in a CI specific test command and avoiding calling `npm test` in CI.
+1. Setup an additional job in the CI (e.g. `test_coverage`) that runs after the concurrent testing is completed.
+    - Explicitly run posttest with the merge argument: `npm run posttest -- --merge`.
+
+<img src="https://circleci.com/docs/assets/img/docs/fan-out-in.png" width="300">
+
+
+Example `package.json` script:
+```js
+{
+  "scripts": {
+    "test:ci": "jest --coverage --runInBand --reporters=default --reporters=jest-junit --ci", // don't trigger posttest
+  }
+}
+```
+
+Example `config.json`:
+```js
+{
+  ...
+  "mergeCoveragePath": "workspace/final-coverage-files",
+  ...
+}
+```
+
 
 ## CLI
 ```console
@@ -132,6 +164,8 @@ Options:
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
                            - Force accept a reduction in coverage.
+
+  --merge                Merges together concurrently collected coverage
 ```
 
 ## FAQ
