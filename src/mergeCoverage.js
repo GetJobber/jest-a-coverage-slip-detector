@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const libCoverage = require("istanbul-lib-coverage");
 const libReport = require("istanbul-lib-report");
 const reports = require("istanbul-reports");
@@ -15,9 +16,9 @@ function mergeCoverageMaps(files) {
   return coverageMap;
 }
 
-function generateSummaryReport(coverageMap) {
+function generateSummaryReport(dir, coverageMap) {
   const context = libReport.createContext({
-    dir: ".",
+    dir,
     coverageMap,
   });
 
@@ -32,5 +33,6 @@ exports.mergeCoverageAndGenerateSummaryReport =
 
     const files = fs.readdirSync(config.mergeCoveragePath);
     const coverageMap = mergeCoverageMaps(files);
-    generateSummaryReport(coverageMap);
+    const dir = path.dirname(config.coverageSummaryPath);
+    generateSummaryReport(dir, coverageMap);
   };
