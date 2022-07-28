@@ -1,7 +1,7 @@
 # `@jobber/jest-a-coverage-slip-detector`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![npm version](https://badge.fury.io/js/%40shopify%2Fjest-a-coverage-slip-detector.svg)](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector)
+[![npm version](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector.svg)](https://badge.fury.io/js/%40jobber%2Fjest-a-coverage-slip-detector)
 
 This library ensures that new files have [Jest](https://jestjs.io/) coverage meeting the configured goals.
 
@@ -52,11 +52,11 @@ import { withJestSlipDetection } from "@jobber/jest-a-coverage-slip-detector";
 const config: Config.InitialOptions = {
   coverageReporters: [
     "json-summary" // plus any other reporters, e.g. "lcov", "text", "text-summary"
-  ]
+  ],
   collectCoverage: true,
   transform: {
     "^.+\\.ts?$": "ts-jest",
-  },
+  }
 };
 
 export default withJestSlipDetection(config);
@@ -117,6 +117,38 @@ Example:
 - If you want to soft-launch the tooling, use the `--report-only` option in the initial rollout, and remove the option once you're ready to require coverage errors to be addressed.
 - As improvements to test coverage are made to legacy files, run `npm run jest:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
 
+## Concurrency and Parallelism
+
+If you're leveraging parallelism to do test splitting and running your tests concurrently on CI (e.g. fan-out/fan-in), a few adjustments to the pattern are needed. Collecting coverage while testing and reporting using `postpost` will result in reporting happening multiple times on each concurrent test run, potentially against incomplete coverage numbers.
+
+If parallelism is being used:
+1. Collect full `json` coverage reports - this will happen automatically if you configure a `mergeCoveragePath` and use `--ci` in your CI's test command.
+    - You will need to configure your CI to collect these in such a way that they can be located later using the path configured in `mergeCoveragePath`. For CircleCI, this means adding them to a workspace folder with unique names.
+1. Ensure you aren't triggering `posttest` in your CI - this means using jest directly in a CI specific test command and avoiding calling `npm test` in CI.
+1. Setup an additional job in the CI (e.g. `test_coverage`) that runs after the concurrent testing is completed.
+    - Explicitly run posttest with the merge argument: `npm run posttest -- --merge`.
+
+<img src="https://circleci.com/docs/assets/img/docs/fan-out-in.png" width="300">
+
+
+Example `package.json` script:
+```js
+{
+  "scripts": {
+    "test:ci": "jest --coverage --runInBand --reporters=default --reporters=jest-junit --ci", // don't trigger posttest
+  }
+}
+```
+
+Example `config.json`:
+```js
+{
+  ...
+  "mergeCoveragePath": "workspace/final-coverage-files",
+  ...
+}
+```
+
 
 ## CLI
 ```console
@@ -133,6 +165,8 @@ Options:
                          Used to:
                            - Snapshot current coverage errors as legacy exceptions.
                            - Force accept a reduction in coverage.
+
+  --merge                Merges together concurrently collected coverage
 
   --report-only          Exit successfully even if coverage errors are detected.
 ```
