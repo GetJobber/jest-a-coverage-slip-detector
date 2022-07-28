@@ -7,7 +7,8 @@ const {
 const { mergeCoverageAndGenerateSummaryReport } = require("./mergeCoverage");
 
 let validateCoverage = false;
-switch (process.argv[2]) {
+const option = process.argv[2];
+switch (option) {
   case "--help":
   case "-h":
     // eslint-disable-next-line no-console
@@ -26,6 +27,8 @@ Options:
                            - Force accept a reduction in coverage.
 
   --merge                Merges together concurrently collected coverage
+
+  --report-only          Exit successfully even if coverage errors are detected.
     `);
     break;
   case "--force":
@@ -45,7 +48,7 @@ Options:
 }
 
 if (validateCoverage) {
-  if (runPerFileCoverageTest()) {
+  if (runPerFileCoverageTest() && option !== "--report-only") {
     process.exit(1);
   }
 }
