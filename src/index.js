@@ -4,4 +4,6 @@ module.exports = {
   updatePerFileCoverageExceptions: require("./updatePerFileCoverageExceptions")
     .updatePerFileCoverageExceptions,
   withJestSlipDetection: require("./config").withJestSlipDetection,
+  mergeCoverageAndGenerateSummaryReport:
+    require("./mergeCoverage").mergeCoverageAndGenerateSummaryReport,
 };

@@ -6,4 +6,6 @@ declare module "@jobber/jest-a-coverage-slip-detector" {
   export function withJestSlipDetection(jestConfig: {
     collectCoverageFrom?: string[];
   }): any;
+
+  export function mergeCoverageAndGenerateSummaryReport(): void;
 }

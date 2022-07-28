@@ -18,6 +18,7 @@ const defaultConfig = {
     "!**/node_modules/**",
     "!**/vendor/**",
   ],
+  mergeCoveragePath: "",
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
@@ -51,14 +52,41 @@ function loadConfig() {
 exports.loadConfig = loadConfig;
 
 exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
-  const cliArgumentPrefix = "-";
   const config = loadConfig();
-
-  // collect coverage from everywhere if we don't have a testPathPattern
   const args = process.argv.slice(2);
+
+  setupCoverageReporters(args, config, jestConfig);
+  setupCollectCoverageFrom(args, config, jestConfig);
+  validateJestConfig(jestConfig, args);
+
+  return jestConfig;
+};
+
+function setupCoverageReporters(args, config, jestConfig) {
+  const jsonReporter = "json";
+  const isCI = args.some(arg => arg === "--ci");
+  if (isCI && config.mergeCoveragePath) {
+    const reporters = [].concat(config.coverageReporters);
+    if (
+      !reporters.some(
+        reporter =>
+          reporter === jsonReporter ||
+          (Array.isArray(reporter) && reporter[0] === jsonReporter),
+      )
+    ) {
+      reporters.push(jsonReporter);
+      jestConfig.coverageReporters = reporters;
+    }
+  }
+}
+
+function setupCollectCoverageFrom(args, config, jestConfig) {
+  // collect coverage from everywhere if we don't have a testPathPattern
+  const cliArgumentPrefix = "-";
   const hasTestPathPattern = args.some(
     arg => !arg.startsWith(cliArgumentPrefix),
   );
+
   if (
     !hasTestPathPattern &&
     !jestConfig.collectCoverageFrom &&
@@ -66,11 +94,7 @@ exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
   ) {
     jestConfig.collectCoverageFrom = [].concat(config.coverageGlob);
   }
-
-  validateJestConfig(jestConfig, args);
-
-  return jestConfig;
-};
+}
 
 function validateJestConfig(jestConfig, args) {
   const warnings = [];
