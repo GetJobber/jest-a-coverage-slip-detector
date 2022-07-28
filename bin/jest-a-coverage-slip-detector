@@ -4,7 +4,9 @@ const {
   updatePerFileCoverageExceptions,
   runPerFileCoverageTest,
 } = require("../src");
-const { mergeCoverageAndGenerateSummaryReport } = require("./mergeCoverage");
+const {
+  mergeCoverageAndGenerateSummaryReport,
+} = require("../src/mergeCoverage");
 
 let validateCoverage = false;
 const option = process.argv[2];
