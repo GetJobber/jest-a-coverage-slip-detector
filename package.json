@@ -6,7 +6,12 @@
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint .",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.js' --write"
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.js' --write",
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major",
+    "postversion": "git push && git push --tags",
+    "release": "npm publish --access public"
   },
   "repository": {
     "type": "git",
