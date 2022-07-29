@@ -19,6 +19,7 @@ const defaultConfig = {
     "!**/vendor/**",
   ],
   mergeCoveragePath: "",
+  tolerance: 0.02,
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",

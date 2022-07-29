@@ -32,7 +32,10 @@ exports.mergeCoverageAndGenerateSummaryReport =
     }
 
     const files = fs.readdirSync(config.mergeCoveragePath);
-    const coverageMap = mergeCoverageMaps(files);
-    const dir = path.dirname(config.coverageSummaryPath);
+    const filePaths = files.map(file =>
+      path.join(config.mergeCoveragePath, file),
+    );
+    const coverageMap = mergeCoverageMaps(filePaths);
+    const dir = path.dirname(config.input.coverageSummaryPath);
     generateSummaryReport(dir, coverageMap);
   };

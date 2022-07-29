@@ -51,7 +51,7 @@ exports.updatePerFileCoverageExceptions =
         const file = fullFile.replace(projectDir, ".");
         if (coverageIgnore.some(ignoreGlob => minimatch(file, ignoreGlob))) {
           // Skip ignored file.
-        } else if (coverageLessThan(coverage, config.coverageGoal)) {
+        } else if (coverageLessThan(coverage, config.coverageGoal, 0)) {
           exceptions[file] = coverageException(coverage, config.coverageGoal);
         }
 
