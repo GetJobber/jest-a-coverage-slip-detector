@@ -23,7 +23,9 @@ function perFileCoverageReport(
       return;
     } else if (coverageExceptions[file]) {
       // Check file against exceptions.
-      if (coverageLessThan(coverage, coverageExceptions[file])) {
+      if (
+        coverageLessThan(coverage, coverageExceptions[file], config.tolerance)
+      ) {
         exceptionsBelowCoverageThreshold.push({
           file,
           current: fullCoverageToPercent(coverage),
@@ -45,7 +47,9 @@ function perFileCoverageReport(
         });
       }
       return;
-    } else if (coverageLessThan(coverage, config.coverageGoal)) {
+    } else if (
+      coverageLessThan(coverage, config.coverageGoal, config.tolerance)
+    ) {
       // Check file normally.
       filesBelowCoverageThreshold.push({
         file,
@@ -184,9 +188,9 @@ function fromCoverageFiles() {
 }
 
 exports.coverageLessThan = coverageLessThan;
-function coverageLessThan(current, goal) {
+function coverageLessThan(current, goal, tolerance) {
   return Object.entries(current).some(
-    ([key, { pct: percent }]) => percent < goal[key],
+    ([key, { pct: percent }]) => percent + tolerance < goal[key],
   );
 }
 
