@@ -36,6 +36,6 @@ exports.mergeCoverageAndGenerateSummaryReport =
       path.join(config.mergeCoveragePath, file),
     );
     const coverageMap = mergeCoverageMaps(filePaths);
-    const dir = path.dirname(config.coverageSummaryPath);
+    const dir = path.dirname(config.input.coverageSummaryPath);
     generateSummaryReport(dir, coverageMap);
   };
