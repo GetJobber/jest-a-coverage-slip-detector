@@ -66,7 +66,7 @@ function setupCoverageReporters(args, config, jestConfig) {
   const jsonReporter = "json";
   const isCI = args.some(arg => arg === "--ci");
   if (isCI && config.mergeCoveragePath) {
-    const reporters = [].concat(config.coverageReporters);
+    const reporters = [].concat(jestConfig.coverageReporters || []);
     if (
       !reporters.some(
         reporter =>
