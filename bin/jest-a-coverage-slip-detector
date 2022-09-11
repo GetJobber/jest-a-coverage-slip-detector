@@ -9,6 +9,7 @@ const {
 } = require("../src/mergeCoverage");
 
 let validateCoverage = false;
+let mergePerformed = false;
 const option = process.argv[2];
 switch (option) {
   case "--help":
@@ -43,6 +44,7 @@ Options:
   case "--merge":
     mergeCoverageAndGenerateSummaryReport();
     validateCoverage = true;
+    mergePerformed = true;
     break;
   default:
     validateCoverage = true;
@@ -50,7 +52,7 @@ Options:
 }
 
 if (validateCoverage) {
-  if (runPerFileCoverageTest() && option !== "--report-only") {
+  if (runPerFileCoverageTest(mergePerformed) && option !== "--report-only") {
     process.exit(1);
   }
 }

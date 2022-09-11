@@ -23,6 +23,7 @@ const defaultConfig = {
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
+    alwaysMerge: true,
   },
   output: {
     generatedCoverageExceptionsPath: "generatedCoverageExceptions.json",
