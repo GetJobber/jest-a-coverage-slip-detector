@@ -70,8 +70,8 @@ Within `package.json`:
   "scripts": {
     "test": "jest --coverage", // or set `collectCoverage` to `true` in Jest config
     "posttest": "jest-a-coverage-slip-detector",
-    "jest:updateCoverageExceptions": "jest-a-coverage-slip-detector --update", // Used to 'ratchet' up coverage after improving it.
-    "jest:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update" // Used to set the initial per file snapshot or to force accept a reduction in coverage.
+    "test:updateCoverageExceptions": "jest-a-coverage-slip-detector --update", // Used to 'ratchet' up coverage after improving it.
+    "test:updateCoverageExceptionsForce": "jest-a-coverage-slip-detector --force-update" // Used to set the initial per file snapshot or to force accept a reduction in coverage.
   }
 }
 ```
@@ -108,14 +108,14 @@ Example:
 ### First Run
 
 1. Generate and view coverage errors: `npm test`
-1. Snapshot current coverage errors as legacy exceptions: `npm run jest:updateCoverageExceptionsForce`
+1. Snapshot current coverage errors as legacy exceptions: `npm run test:updateCoverageExceptionsForce`
 1. Commit the generated exception listing (`generatedCoverageExceptions.json` by default) to source control
 
 ### Going Forward
 
 - Run `npm test` as normal (locally or in CI), any slips in test coverage will fail out the command. Note that this will happen for either legacy files not meeting their recorded targets, or in new files not meeting the configured goals.
 - If you want to soft-launch the tooling, use the `--report-only` option in the initial rollout, and remove the option once you're ready to require coverage errors to be addressed.
-- As improvements to test coverage are made to legacy files, run `npm run jest:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
+- As improvements to test coverage are made to legacy files, run `npm run test:updateCoverageExceptions` to update the exception listing (and commit it) to "ratchet" up the coverage.
 
 ## Concurrency and Parallelism
 
@@ -175,7 +175,7 @@ Options:
 
 *After I'm setup with this library, what if I decide to raise the coverage goal higher for new code?*
 
-- No problem! Just set the goal higher in the project's `jest-a-coverage-slip-detector/config.json` file and then update snapshots using `npm run jest:updateCoverageExceptionsForce`.
+- No problem! Just set the goal higher in the project's `jest-a-coverage-slip-detector/config.json` file and then update snapshots using `npm run test:updateCoverageExceptionsForce`.
 
 *Do I need to use different test commands on dev than I would on CI?*
 
