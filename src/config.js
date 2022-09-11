@@ -18,8 +18,8 @@ const defaultConfig = {
     "!**/node_modules/**",
     "!**/vendor/**",
   ],
-  mergeCoveragePath: "",
-  tolerance: 0.02,
+  mergeCoveragePath: "coverage",
+  tolerance: 0,
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
@@ -57,62 +57,39 @@ exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
   const config = loadConfig();
   const args = process.argv.slice(2);
 
-  setupCoverageReporters(args, config, jestConfig);
   setupCollectCoverageFrom(args, config, jestConfig);
   validateJestConfig(jestConfig, args);
 
   return jestConfig;
 };
 
-function setupCoverageReporters(args, config, jestConfig) {
-  const jsonReporter = "json";
-  const isCI = args.some(arg => arg === "--ci");
-  if (isCI && config.mergeCoveragePath) {
-    const reporters = [].concat(jestConfig.coverageReporters || []);
-    if (
-      !reporters.some(
-        reporter =>
-          reporter === jsonReporter ||
-          (Array.isArray(reporter) && reporter[0] === jsonReporter),
-      )
-    ) {
-      reporters.push(jsonReporter);
-      jestConfig.coverageReporters = reporters;
-    }
-  }
-}
-
 function setupCollectCoverageFrom(args, config, jestConfig) {
-  // collect coverage from everywhere if we don't have a testPathPattern
-  const cliArgumentPrefix = "-";
-  const hasTestPathPattern = args.some(
-    arg => !arg.startsWith(cliArgumentPrefix),
-  );
-
-  if (
-    !hasTestPathPattern &&
-    !jestConfig.collectCoverageFrom &&
-    config.coverageGlob
-  ) {
+  const isCI = args.some(arg => arg === "--ci");
+  if (isCI && !jestConfig.collectCoverageFrom && config.coverageGlob) {
     jestConfig.collectCoverageFrom = [].concat(config.coverageGlob);
   }
 }
 
 function validateJestConfig(jestConfig, args) {
+  const isCI = args.some(arg => arg === "--ci");
   const warnings = [];
 
-  if (!jestConfig.collectCoverage && !args.some(arg => arg === "--coverage")) {
+  if (
+    isCI &&
+    !jestConfig.collectCoverage &&
+    !args.some(arg => arg === "--coverage")
+  ) {
     warnings.push(
-      "Ensure `collectCoverage` is enabled in the Jest configuration or the `--coverage` argument is used.",
+      "Ensure the `--coverage` argument is used in your CI command, or alternatively, enable `collectCoverage` in the Jest configuration.",
     );
   }
 
   if (
     !jestConfig.coverageReporters ||
-    !jestConfig.coverageReporters.some(reporter => reporter === "json-summary")
+    !jestConfig.coverageReporters.some(reporter => reporter === "json")
   ) {
     warnings.push(
-      "Ensure `json-summary` is added into `coverageReporters` in the Jest configuration.",
+      "Ensure `json` is added into `coverageReporters` in the Jest configuration.",
     );
   }
 
