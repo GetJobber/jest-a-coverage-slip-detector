@@ -30,16 +30,16 @@ const defaultConfig = {
   },
   messages: {
     belowThreshold:
-      "The following files are below their required test coverage threshold. Raise them before updating exceptions.",
+      "The following files are below the test coverage goals. Add more coverage!",
     belowLegacyThreshold:
-      "Some legacy files have a lower inherited coverage threshold. Raise coverage in these files to at least this level.",
+      "Note that some of these files only need to be brought up to their legacy thresholds (see the Goal column) - although feel free to bring them up beyond that.",
     aboveThreshold:
-      "The following files are above their inherited test coverage threshold. These exceptions should be updated to meet their new level.",
+      "Congratulations! The test coverage in the following files has been improved, let's lock in the updated thresholds.",
     regeneratePrompt: `After a complete and passing ${chalk.yellow(
-      "`npm test`",
+      "`npm run test:generateCoverage`,",
     )} use ${chalk.yellow(
       "`npm run test:updateCoverageExceptions`",
-    )} to regenerate the required test threshold for these files.`,
+    )} to update the coverage threshold for these files.`,
   },
 };
 
