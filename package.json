@@ -10,7 +10,7 @@
     "patch": "npm version patch",
     "minor": "npm version minor",
     "major": "npm version major",
-    "postversion": "git push origin main && git push origin main --tags",
+    "postversion": "git push -u origin HEAD && git push origin main --tags",
     "release": "npm publish --access public"
   },
   "repository": {
