@@ -8,6 +8,7 @@ const {
   logViolations,
   coverageLessThan,
 } = require("./coverageUtilities");
+const { mergeCoverageAndGenerateSummaryReport } = require("./mergeCoverage");
 
 function ensurePathExists(filePath) {
   const dir = path.dirname(filePath);
@@ -19,6 +20,10 @@ function ensurePathExists(filePath) {
 exports.updatePerFileCoverageExceptions =
   function updatePerFileCoverageExceptions(forceUpdate = false) {
     const config = loadConfig();
+    if (config.input.alwaysMerge) {
+      mergeCoverageAndGenerateSummaryReport();
+    }
+
     const { writeFileSync } = require("fs");
 
     const { coverageSummary, coverageExceptions, coverageIgnore } =

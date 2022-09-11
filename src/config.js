@@ -18,27 +18,28 @@ const defaultConfig = {
     "!**/node_modules/**",
     "!**/vendor/**",
   ],
-  mergeCoveragePath: "",
-  tolerance: 0.02,
+  mergeCoveragePath: "coverage",
+  tolerance: 0,
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
+    alwaysMerge: true,
   },
   output: {
     generatedCoverageExceptionsPath: "generatedCoverageExceptions.json",
   },
   messages: {
     belowThreshold:
-      "The following files are below their required test coverage threshold. Raise them before updating exceptions.",
+      "The following files are below the test coverage goals. Add more coverage!",
     belowLegacyThreshold:
-      "Some legacy files have a lower inherited coverage threshold. Raise coverage in these files to at least this level.",
+      "Note that some of these files only need to be brought up to their legacy thresholds (see the Goal column) - although feel free to bring them up beyond that.",
     aboveThreshold:
-      "The following files are above their inherited test coverage threshold. These exceptions should be updated to meet their new level.",
+      "Congratulations! The test coverage in the following files has been improved, let's lock in the updated thresholds.",
     regeneratePrompt: `After a complete and passing ${chalk.yellow(
-      "`npm test`",
+      "`npm run test:generateCoverage`,",
     )} use ${chalk.yellow(
-      "`npm run jest:updateCoverageExceptions`",
-    )} to regenerate the required test threshold for these files.`,
+      "`npm run test:updateCoverageExceptions`",
+    )} to update the coverage threshold for these files.`,
   },
 };
 
@@ -56,62 +57,39 @@ exports.withJestSlipDetection = function withJestSlipDetection(jestConfig) {
   const config = loadConfig();
   const args = process.argv.slice(2);
 
-  setupCoverageReporters(args, config, jestConfig);
   setupCollectCoverageFrom(args, config, jestConfig);
   validateJestConfig(jestConfig, args);
 
   return jestConfig;
 };
 
-function setupCoverageReporters(args, config, jestConfig) {
-  const jsonReporter = "json";
-  const isCI = args.some(arg => arg === "--ci");
-  if (isCI && config.mergeCoveragePath) {
-    const reporters = [].concat(jestConfig.coverageReporters || []);
-    if (
-      !reporters.some(
-        reporter =>
-          reporter === jsonReporter ||
-          (Array.isArray(reporter) && reporter[0] === jsonReporter),
-      )
-    ) {
-      reporters.push(jsonReporter);
-      jestConfig.coverageReporters = reporters;
-    }
-  }
-}
-
 function setupCollectCoverageFrom(args, config, jestConfig) {
-  // collect coverage from everywhere if we don't have a testPathPattern
-  const cliArgumentPrefix = "-";
-  const hasTestPathPattern = args.some(
-    arg => !arg.startsWith(cliArgumentPrefix),
-  );
-
-  if (
-    !hasTestPathPattern &&
-    !jestConfig.collectCoverageFrom &&
-    config.coverageGlob
-  ) {
+  const isCI = args.some(arg => arg === "--ci");
+  if (isCI && !jestConfig.collectCoverageFrom && config.coverageGlob) {
     jestConfig.collectCoverageFrom = [].concat(config.coverageGlob);
   }
 }
 
 function validateJestConfig(jestConfig, args) {
+  const isCI = args.some(arg => arg === "--ci");
   const warnings = [];
 
-  if (!jestConfig.collectCoverage && !args.some(arg => arg === "--coverage")) {
+  if (
+    isCI &&
+    !jestConfig.collectCoverage &&
+    !args.some(arg => arg === "--coverage")
+  ) {
     warnings.push(
-      "Ensure `collectCoverage` is enabled in the Jest configuration or the `--coverage` argument is used.",
+      "Ensure the `--coverage` argument is used in your CI command, or alternatively, enable `collectCoverage` in the Jest configuration.",
     );
   }
 
   if (
     !jestConfig.coverageReporters ||
-    !jestConfig.coverageReporters.some(reporter => reporter === "json-summary")
+    !jestConfig.coverageReporters.some(reporter => reporter === "json")
   ) {
     warnings.push(
-      "Ensure `json-summary` is added into `coverageReporters` in the Jest configuration.",
+      "Ensure `json` is added into `coverageReporters` in the Jest configuration.",
     );
   }
 
