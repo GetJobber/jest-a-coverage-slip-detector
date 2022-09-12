@@ -24,6 +24,7 @@ const defaultConfig = {
     coverageSummaryPath: "coverage/coverage-summary.json",
     coverageIgnorePath: "coverageIgnore.json",
     alwaysMerge: true,
+    mergePrefix: "coverage-final",
   },
   output: {
     generatedCoverageExceptionsPath: "generatedCoverageExceptions.json",

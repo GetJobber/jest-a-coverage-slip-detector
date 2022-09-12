@@ -43,7 +43,11 @@ exports.mergeCoverageAndGenerateSummaryReport =
 
     const files = fs.readdirSync(config.mergeCoveragePath);
     const filePaths = files
-      .filter(file => path.extname(file) === ".json")
+      .filter(
+        file =>
+          path.basename(file).startsWith(config.input.mergePrefix) &&
+          path.extname(file) === ".json",
+      )
       .map(file => path.join(config.mergeCoveragePath, file));
     const coverageMap = mergeCoverageMaps(filePaths, config.input.alwaysMerge);
     const dir = path.dirname(config.input.coverageSummaryPath);
