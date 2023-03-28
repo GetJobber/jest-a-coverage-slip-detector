@@ -25,7 +25,8 @@ function mergeCoverageMaps(files, alwaysMerge) {
   return coverageMap;
 }
 
-function generateSummaryReport(dir, coverageMap) {
+function generateSummaryReport(config, coverageMap) {
+  const dir = path.dirname(config.input.coverageSummaryPath);
   const context = libReport.createContext({
     dir,
     coverageMap,
@@ -34,22 +35,39 @@ function generateSummaryReport(dir, coverageMap) {
   reports.create("json-summary").execute(context);
 }
 
-exports.mergeCoverageAndGenerateSummaryReport =
+function generateHtmlReport(config, coverageMap) {
+  const dir = config.input.coverageHtmlPath;
+  const context = libReport.createContext({
+    dir,
+    coverageMap,
+  });
+
+  reports.create("html").execute(context);
+}
+
+function mergeCoverage(config) {
+  if (!config.mergeCoveragePath) {
+    throw "Missing required configuration option: `mergeCoveragePath`";
+  }
+
+  const files = fs.readdirSync(config.mergeCoveragePath);
+  const filePaths = files
+    .filter(
+      file =>
+        path.basename(file).startsWith(config.input.mergePrefix) &&
+        path.extname(file) === ".json",
+    )
+    .map(file => path.join(config.mergeCoveragePath, file));
+  const coverageMap = mergeCoverageMaps(filePaths, config.input.alwaysMerge);
+
+  return coverageMap;
+}
+
+exports.mergeCoverageAndGenerateReports =
   function mergeCoverageAndGenerateSummaryReport() {
     const config = loadConfig();
-    if (!config.mergeCoveragePath) {
-      throw "Missing required configuration option: `mergeCoveragePath`";
-    }
+    const mergedCoverage = mergeCoverage(config);
 
-    const files = fs.readdirSync(config.mergeCoveragePath);
-    const filePaths = files
-      .filter(
-        file =>
-          path.basename(file).startsWith(config.input.mergePrefix) &&
-          path.extname(file) === ".json",
-      )
-      .map(file => path.join(config.mergeCoveragePath, file));
-    const coverageMap = mergeCoverageMaps(filePaths, config.input.alwaysMerge);
-    const dir = path.dirname(config.input.coverageSummaryPath);
-    generateSummaryReport(dir, coverageMap);
+    generateSummaryReport(config, mergedCoverage);
+    generateHtmlReport(config, mergedCoverage);
   };

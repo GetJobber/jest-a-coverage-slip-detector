@@ -22,6 +22,7 @@ const defaultConfig = {
   tolerance: 0,
   input: {
     coverageSummaryPath: "coverage/coverage-summary.json",
+    coverageHtmlPath: "coverage/html-report",
     coverageIgnorePath: "coverageIgnore.json",
     alwaysMerge: true,
     mergePrefix: "coverage-final",

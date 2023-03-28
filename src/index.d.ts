@@ -7,5 +7,5 @@ declare module "@jobber/jest-a-coverage-slip-detector" {
     collectCoverageFrom?: string[];
   }): any;
 
-  export function mergeCoverageAndGenerateSummaryReport(): void;
+  export function mergeCoverageAndGenerateReports(): void;
 }
