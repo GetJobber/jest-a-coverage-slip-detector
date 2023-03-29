@@ -25,26 +25,6 @@ function mergeCoverageMaps(files, alwaysMerge) {
   return coverageMap;
 }
 
-function generateSummaryReport(config, coverageMap) {
-  const dir = path.dirname(config.input.coverageSummaryPath);
-  const context = libReport.createContext({
-    dir,
-    coverageMap,
-  });
-
-  reports.create("json-summary").execute(context);
-}
-
-function generateHtmlReport(config, coverageMap) {
-  const dir = config.input.coverageHtmlPath;
-  const context = libReport.createContext({
-    dir,
-    coverageMap,
-  });
-
-  reports.create("html").execute(context);
-}
-
 function mergeCoverage(config) {
   if (!config.mergeCoveragePath) {
     throw "Missing required configuration option: `mergeCoveragePath`";
@@ -67,6 +47,19 @@ exports.mergeCoverageAndGenerateReports =
     const config = loadConfig();
     const mergedCoverage = mergeCoverage(config);
 
-    generateSummaryReport(config, mergedCoverage);
-    generateHtmlReport(config, mergedCoverage);
+    for (const [reportType, directoryFromConfig] of Object.entries(
+      reportsTypeMap,
+    )) {
+      const context = libReport.createContext({
+        dir: directoryFromConfig(config),
+        coverageMap: mergedCoverage,
+      });
+
+      reports.create(reportType).execute(context);
+    }
   };
+
+const reportsTypeMap = {
+  html: config => config.input.coverageHtmlPath,
+  ["json-summary"]: config => path.dirname(config.input.coverageSummaryPath),
+};
