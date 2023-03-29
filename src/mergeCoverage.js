@@ -58,9 +58,8 @@ function mergeCoverage(config) {
         path.extname(file) === ".json",
     )
     .map(file => path.join(config.mergeCoveragePath, file));
-  const coverageMap = mergeCoverageMaps(filePaths, config.input.alwaysMerge);
 
-  return coverageMap;
+  return mergeCoverageMaps(filePaths, config.input.alwaysMerge);
 }
 
 exports.mergeCoverageAndGenerateReports =
