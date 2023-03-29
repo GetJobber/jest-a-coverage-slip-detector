@@ -63,7 +63,7 @@ function mergeCoverage(config) {
 }
 
 exports.mergeCoverageAndGenerateReports =
-  function mergeCoverageAndGenerateSummaryReport() {
+  function mergeCoverageAndGenerateReports() {
     const config = loadConfig();
     const mergedCoverage = mergeCoverage(config);
 
