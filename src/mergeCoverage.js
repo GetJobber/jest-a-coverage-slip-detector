@@ -60,6 +60,6 @@ exports.mergeCoverageAndGenerateReports =
   };
 
 const reportsTypeMap = {
-  html: config => config.input.coverageHtmlPath,
+  html: config => config.output.generatedHtmlPath,
   ["json-summary"]: config => path.dirname(config.input.coverageSummaryPath),
 };
