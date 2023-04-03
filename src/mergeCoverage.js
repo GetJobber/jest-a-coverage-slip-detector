@@ -6,7 +6,6 @@ const reports = require("istanbul-reports");
 const { loadConfig } = require("./config");
 
 const JSON_SUMMARY_REPORT_KEY = "json-summary";
-const HTML_REPORT_KEY = "html";
 
 function loadData(filePath) {
   const json = fs.readFileSync(filePath);
@@ -50,26 +49,21 @@ exports.mergeCoverageAndGenerateReports =
     const config = loadConfig();
     const mergedCoverage = mergeCoverage(config);
 
-    // We always want to produce the json-summary report because it is required
-    // for the validation phase.
-    const reportsToProduce = [
-      JSON_SUMMARY_REPORT_KEY,
+    // We always want to produce the json-summary report
+    // because it is required for the validation phase.
+    const reportOutputDirectories = {
       ...config.output.additionalReports,
-    ];
+      [JSON_SUMMARY_REPORT_KEY]: path.dirname(config.input.coverageSummaryPath),
+    };
 
-    for (const reportType of reportsToProduce) {
-      const directoryFromConfig = reportsTypeMap[reportType];
+    for (const [reportType, outputDirectory] of Object.entries(
+      reportOutputDirectories,
+    )) {
       const context = libReport.createContext({
-        dir: directoryFromConfig(config),
+        dir: outputDirectory,
         coverageMap: mergedCoverage,
       });
 
       reports.create(reportType).execute(context);
     }
   };
-
-const reportsTypeMap = {
-  [HTML_REPORT_KEY]: config => config.output.generatedHtmlPath,
-  [JSON_SUMMARY_REPORT_KEY]: config =>
-    path.dirname(config.input.coverageSummaryPath),
-};
