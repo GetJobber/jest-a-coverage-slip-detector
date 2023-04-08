@@ -4,9 +4,7 @@ const {
   updatePerFileCoverageExceptions,
   runPerFileCoverageTest,
 } = require("../src");
-const {
-  mergeCoverageAndGenerateSummaryReport,
-} = require("../src/mergeCoverage");
+const { mergeCoverageAndGenerateReports } = require("../src/mergeCoverage");
 
 let validateCoverage = false;
 let mergePerformed = false;
@@ -42,7 +40,7 @@ Options:
     updatePerFileCoverageExceptions(false);
     break;
   case "--merge":
-    mergeCoverageAndGenerateSummaryReport();
+    mergeCoverageAndGenerateReports();
     validateCoverage = true;
     mergePerformed = true;
     break;

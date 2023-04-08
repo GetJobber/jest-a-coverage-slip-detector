@@ -28,6 +28,9 @@ const defaultConfig = {
   },
   output: {
     generatedCoverageExceptionsPath: "generatedCoverageExceptions.json",
+    additionalReports: {
+      html: "coverage/html-report",
+    },
   },
   messages: {
     belowThreshold:

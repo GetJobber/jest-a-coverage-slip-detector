@@ -5,6 +5,8 @@ const libReport = require("istanbul-lib-report");
 const reports = require("istanbul-reports");
 const { loadConfig } = require("./config");
 
+const JSON_SUMMARY_REPORT_KEY = "json-summary";
+
 function loadData(filePath) {
   const json = fs.readFileSync(filePath);
   return JSON.parse(json);
@@ -25,31 +27,43 @@ function mergeCoverageMaps(files, alwaysMerge) {
   return coverageMap;
 }
 
-function generateSummaryReport(dir, coverageMap) {
-  const context = libReport.createContext({
-    dir,
-    coverageMap,
-  });
+function mergeCoverage(config) {
+  if (!config.mergeCoveragePath) {
+    throw "Missing required configuration option: `mergeCoveragePath`";
+  }
 
-  reports.create("json-summary").execute(context);
+  const files = fs.readdirSync(config.mergeCoveragePath);
+  const filePaths = files
+    .filter(
+      file =>
+        path.basename(file).startsWith(config.input.mergePrefix) &&
+        path.extname(file) === ".json",
+    )
+    .map(file => path.join(config.mergeCoveragePath, file));
+
+  return mergeCoverageMaps(filePaths, config.input.alwaysMerge);
 }
 
-exports.mergeCoverageAndGenerateSummaryReport =
-  function mergeCoverageAndGenerateSummaryReport() {
+exports.mergeCoverageAndGenerateReports =
+  function mergeCoverageAndGenerateReports() {
     const config = loadConfig();
-    if (!config.mergeCoveragePath) {
-      throw "Missing required configuration option: `mergeCoveragePath`";
-    }
+    const mergedCoverage = mergeCoverage(config);
 
-    const files = fs.readdirSync(config.mergeCoveragePath);
-    const filePaths = files
-      .filter(
-        file =>
-          path.basename(file).startsWith(config.input.mergePrefix) &&
-          path.extname(file) === ".json",
-      )
-      .map(file => path.join(config.mergeCoveragePath, file));
-    const coverageMap = mergeCoverageMaps(filePaths, config.input.alwaysMerge);
-    const dir = path.dirname(config.input.coverageSummaryPath);
-    generateSummaryReport(dir, coverageMap);
+    // We always want to produce the json-summary report
+    // because it is required for the validation phase.
+    const reportOutputDirectories = {
+      ...config.output.additionalReports,
+      [JSON_SUMMARY_REPORT_KEY]: path.dirname(config.input.coverageSummaryPath),
+    };
+
+    for (const [reportType, outputDirectory] of Object.entries(
+      reportOutputDirectories,
+    )) {
+      const context = libReport.createContext({
+        dir: outputDirectory,
+        coverageMap: mergedCoverage,
+      });
+
+      reports.create(reportType).execute(context);
+    }
   };
