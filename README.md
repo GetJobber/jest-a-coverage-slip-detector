@@ -13,6 +13,7 @@ Additionally, this library can be added to an existing project such that legacy 
 - designed for CI; updating snapshots is a separate explicit activity
 - supports monitoring completely untested code through dynamic usage of `collectCoverageFrom`
 - supports coverage merging for usage with parallelized testing
+- generates an html coverage report (by default)
 
 ## Requirements
 
