@@ -3,7 +3,7 @@ const {
   perFileCoverageReport,
   logViolations,
 } = require("./coverageUtilities");
-const { mergeCoverageAndGenerateSummaryReport } = require("./mergeCoverage");
+const { mergeCoverageAndGenerateReports } = require("./mergeCoverage");
 const { loadConfig } = require("./config");
 
 exports.runPerFileCoverageTest = function runPerFileCoverageTest(
@@ -11,7 +11,7 @@ exports.runPerFileCoverageTest = function runPerFileCoverageTest(
 ) {
   const config = loadConfig();
   if (config.input.alwaysMerge && !mergePerformed) {
-    mergeCoverageAndGenerateSummaryReport();
+    mergeCoverageAndGenerateReports();
   }
 
   const { coverageSummary, coverageExceptions, coverageIgnore } =
