@@ -140,21 +140,21 @@ TESTFILES=$(npx jest --listTests | sed s:$PWD/:: | circleci tests split --split-
 npm run test:ci $TESTFILES
 ```
 
-2. You will need to configure your CI to keep the full `json` coverage reports around for a follow-up validation step in your workflow. Ensure these can be located later using the path configured in `mergeCoveragePath`. For CircleCI, this means adding them to a workspace folder with unique names:
+2. You will need to configure your CI to keep the full `json` coverage reports around for a follow-up validation step in your workflow. Ensure these can be located later under the coverage output directory (both [jest](https://jestjs.io/docs/configuration#coveragedirectory-string) and `mergeCoveragePath` should be set to the same directory). For CircleCI, this means adding them to a workspace folder with unique names:
 ```js
 // example
-COVERAGE_REPORT_SHARD=final-coverage-files/coverage-final${CIRCLE_NODE_INDEX}.json
+COVERAGE_REPORT_SHARD=coverage/coverage-final${CIRCLE_NODE_INDEX}.json
 npm run test:ci $TESTFILES && mv coverage/coverage-final.json $COVERAGE_REPORT_SHARD
 ```
 
 3. Setup an additional job in the CI (e.g. `test_coverage`) that runs after the concurrent testing is completed.
     - Explicitly run `test:validateCoverage` with the `merge` argument: `npm run test:validateCoverage -- --merge`.
 
-Example `config.json`:
+Example `config.json` (the `mergeCoveragePath` directory should [match jest](https://jestjs.io/docs/configuration#coveragedirectory-string)):
 ```js
 {
   ...
-  "mergeCoveragePath": "final-coverage-files",
+  "mergeCoveragePath": "coverage",
   ...
 }
 ```

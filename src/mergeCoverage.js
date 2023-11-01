@@ -32,6 +32,10 @@ function mergeCoverage(config) {
     throw "Missing required configuration option: `mergeCoveragePath`";
   }
 
+  if (!fs.existsSync(config.mergeCoveragePath)) {
+    throw `Merge coverage path does not exist: ${config.mergeCoveragePath}`;
+  }
+
   const files = fs.readdirSync(config.mergeCoveragePath);
   const filePaths = files
     .filter(
