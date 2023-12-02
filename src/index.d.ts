@@ -5,9 +5,7 @@ declare module "@jobber/jest-a-coverage-slip-detector" {
 
   export function updatePerFileCoverageExceptions(forceUpdate: boolean): void;
 
-  export function withJestSlipDetection(jestConfig: Config.InitialOptions & {
-    collectCoverageFrom?: string[];
-  }): Config.InitialOptions;
+  export function withJestSlipDetection(jestConfig: Config.InitialOptions): Config.InitialOptions;
 
   export function mergeCoverageAndGenerateReports(): void;
 }
