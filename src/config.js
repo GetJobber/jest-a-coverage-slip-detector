@@ -44,6 +44,8 @@ const defaultConfig = {
     )} use ${chalk.yellow(
       "`npm run test:updateCoverageExceptions`",
     )} to update the coverage threshold for these files.`,
+    // Override this message with a custom documentation prompt.
+    documentationPrompt: undefined,
   },
 };
 
