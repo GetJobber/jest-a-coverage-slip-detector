@@ -94,7 +94,7 @@ function logViolations(
     infoTableData.push(["", `\n${details}`]);
   }
 
-  if (config.messages.documentationPrompt) {
+  if (config.output.displayDocumentationPrompt) {
     infoTableData.push(["", `\n${config.messages.documentationPrompt}`]);
   }
 
