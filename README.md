@@ -182,7 +182,7 @@ Options:
 ```
 
 ## Testing locally
-- Run `npm:install` in this repo to ensure everything is up-to-date
+- Run `npm install` in this repo to ensure everything is up-to-date
 - Run `npm:link` to register the package locally
 - In the repo consuming this package, run `npm link @jobber/jest-a-coverage-slip-detector`
 - Run `jest-a-coverage-slip-detector` - it will run this repo's code directly!
