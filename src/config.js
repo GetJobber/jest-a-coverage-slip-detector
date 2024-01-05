@@ -31,6 +31,7 @@ const defaultConfig = {
     additionalReports: {
       html: "coverage/html-report",
     },
+    displayDocumentationPrompt: false,
   },
   messages: {
     belowThreshold:
@@ -44,6 +45,9 @@ const defaultConfig = {
     )} use ${chalk.yellow(
       "`npm run test:updateCoverageExceptions`",
     )} to update the coverage threshold for these files.`,
+    documentationPrompt: `For more information on addressing coverage slips, see ${chalk.yellow(
+      "https://example.com/docs/coverage",
+    )}`,
   },
 };
 
