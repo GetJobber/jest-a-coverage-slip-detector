@@ -181,6 +181,12 @@ Options:
   --report-only          Exit successfully even if coverage errors are detected.
 ```
 
+## Testing locally
+- Run `npm:install` in this repo to ensure everything is up-to-date
+- Run `npm:link` to register the package locally
+- In the repo consuming this package, run `npm link @jobber/jest-a-coverage-slip-detector`
+- Run `jest-a-coverage-slip-detector` - it will run this repo's code directly!
+
 ## FAQ
 
 *After I'm setup with this library, what if I decide to raise the coverage goal higher for new code?*
