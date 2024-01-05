@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
+const merge = require("lodash/merge");
 
 const CONFIG_DIR = ".jest-a-coverage-slip-detector";
 const CONFIG_FILE = "config.json";
@@ -53,7 +54,7 @@ function loadConfig() {
     return defaultConfig;
   }
 
-  return { ...defaultConfig, ...require(configPath) };
+  return merge(defaultConfig, require(configPath));
 }
 exports.loadConfig = loadConfig;
 
