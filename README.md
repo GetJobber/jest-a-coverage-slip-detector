@@ -21,7 +21,9 @@ Additionally, this library can be added to an existing project such that legacy 
 
 ## Installation
 
-`npm install --save-dev @jobber/jest-a-coverage-slip-detector`
+```
+npm install --save-dev @jobber/jest-a-coverage-slip-detector
+```
 
 ## Configure Jest
 
