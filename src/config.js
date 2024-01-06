@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
+const merge = require("lodash/merge");
 
 const CONFIG_DIR = ".jest-a-coverage-slip-detector";
 const CONFIG_FILE = "config.json";
@@ -31,6 +32,7 @@ const defaultConfig = {
     additionalReports: {
       html: "coverage/html-report",
     },
+    displayDocumentationPrompt: false,
   },
   messages: {
     belowThreshold:
@@ -44,6 +46,9 @@ const defaultConfig = {
     )} use ${chalk.yellow(
       "`npm run test:updateCoverageExceptions`",
     )} to update the coverage threshold for these files.`,
+    documentationPrompt: `For more information on addressing coverage slips, see ${chalk.yellow(
+      "https://example.com/docs/coverage",
+    )}`,
   },
 };
 
@@ -53,7 +58,7 @@ function loadConfig() {
     return defaultConfig;
   }
 
-  return { ...defaultConfig, ...require(configPath) };
+  return merge(defaultConfig, require(configPath));
 }
 exports.loadConfig = loadConfig;
 

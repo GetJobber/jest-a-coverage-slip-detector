@@ -93,6 +93,11 @@ function logViolations(
   if (details) {
     infoTableData.push(["", `\n${details}`]);
   }
+
+  if (config.output.displayDocumentationPrompt) {
+    infoTableData.push(["", `\n${config.messages.documentationPrompt}`]);
+  }
+
   // eslint-disable-next-line no-console
   console.log(
     table(infoTableData, {
