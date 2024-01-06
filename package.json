@@ -53,6 +53,6 @@
     "table": "^6.8.0"
   },
   "peerDependencies": {
-    "jest": ">=28.1.1"
+    "@jest/types": "*"
   }
 }
