@@ -51,5 +51,8 @@
     "lodash": "^4.17.21",
     "minimatch": "^5.1.0",
     "table": "^6.8.0"
+  },
+  "peerDependencies": {
+    "jest": ">=28.1.1"
   }
 }
