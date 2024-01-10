@@ -1,6 +1,6 @@
 {
   "name": "@jobber/jest-a-coverage-slip-detector",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Ensures that new files have jest coverage and that legacy files only increase",
   "main": "src/index.js",
   "types": "src/index.d.ts",
