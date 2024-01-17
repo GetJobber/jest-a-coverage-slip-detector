@@ -21,7 +21,9 @@
     "jest",
     "ratchet"
   ],
-  "bin": "./bin/jest-a-coverage-slip-detector",
+  "bin": {
+    "jest-a-coverage-slip-detector": "bin/jest-a-coverage-slip-detector"
+  },
   "files": [
     "bin/*",
     "src/*.js",
