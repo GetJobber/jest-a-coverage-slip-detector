@@ -73,7 +73,6 @@ function perFileCoverageReport(
 
 exports.logViolations = logViolations;
 
-// eslint-disable-next-line max-statements
 function logViolations(
   violations,
   message,
@@ -102,9 +101,7 @@ function logViolations(
   console.log(
     table(infoTableData, {
       singleLine: true,
-      columns: {
-        1: { width: halfTerminalWidth, wrapWord: true },
-      },
+      columns: { 1: { width: halfTerminalWidth, wrapWord: true } },
     }),
   );
 
@@ -112,16 +109,9 @@ function logViolations(
 
   const tableConfig = {
     columns: {
-      0: {
-        width: halfTerminalWidth,
-        wrapWord: true,
-      },
-      1: {
-        width: percentColumnWidth,
-      },
-      2: {
-        width: percentColumnWidth,
-      },
+      0: { width: halfTerminalWidth, wrapWord: true },
+      1: { width: percentColumnWidth },
+      2: { width: percentColumnWidth },
     },
   };
 
